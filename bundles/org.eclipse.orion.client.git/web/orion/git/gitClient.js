@@ -442,6 +442,7 @@ eclipse.GitService = (function() {
 			var service = this;
 			
 			var postData = {};
+			postData.isLocal = true;  //property to differentiate between local branch and remote branch.
 			if (branchName) postData.Name = branchName;
 			if (startPoint) postData.Branch = startPoint;
 			
