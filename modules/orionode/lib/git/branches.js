@@ -79,7 +79,8 @@ function getBranches(workspaceDir, fileRoot, req, res, next, rest) {
 				          "Location": "/gitapi/remote/" + remoteBranchName + "/file/" + fileDir,
 				          "Name": remoteBranchName,
 				          // "TreeLocation": "/gitapi/tree/file/" + fileDir + "/" + remoteBranchName,
-				          "Type": "RemoteTrackingBranch"
+				          "Type": "RemoteTrackingBranch",
+				          "isLocal": false  //not a local branch anymore
 				        }],
 				        "CloneLocation": branch["CloneLocation"],
 				        "GitUrl": remote.url(),
