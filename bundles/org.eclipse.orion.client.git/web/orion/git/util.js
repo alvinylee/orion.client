@@ -165,7 +165,7 @@ define([
 		if (ref.Type === "Commit") { //$NON-NLS-0$
 			result = shortenString(result);
 		}
-		if (ref.Type === "RemoteTrackingBranch" && ref.isLocal) { //$NON-NLS-0$
+		if (ref.Type === "RemoteTrackingBranch" && ref.FullName.indexOf("heads") > -1) { //$NON-NLS-0$
 			result += messages[" [New branch]"];
 		}
 		return result;
@@ -209,7 +209,7 @@ define([
 	}
 	
 	function isNewBranch(branch) {
-		return branch && branch.Type === "RemoteTrackingBranch" && branch.isLocal; //$NON-NLS-0$
+		return branch && branch.Type === "RemoteTrackingBranch" && branch.FullName.indexOf("heads") > -1; //$NON-NLS-0$
 	}
 	
 	function tracksRemoteBranch(branch) {
