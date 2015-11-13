@@ -133,7 +133,9 @@ define([
 			var that = this;
 			var activeBranch = this.getActiveBranch();
 			var targetRef = this.getTargetReference();
-			var location = (targetRef.CommitLocation || targetRef.Location) + that.repositoryPath  + that.getQueries("mergeBase=true"); //$NON-NLS-0$
+			//var location = (targetRef.CommitLocation || targetRef.Location) + that.repositoryPath  + that.getQueries("mergeBase=true"); //$NON-NLS-0$
+			/* alvin */
+			var location = (targetRef.CommitLocation || targetRef.Location) + that.repositoryPath  + that.getQueries();
 			var id = activeBranch.Name;
 			return that.syncCommits = that.progressService.progress(that.gitClient.getLog(location, id), messages["Getting git log"]).then(function(resp) {
 				return that.syncCommits = resp;
@@ -326,11 +328,17 @@ define([
 						syncCommits.Children.forEach(function(commit) {
 							commit.history = true;
 						});
+						/* alvin */
+						if (outgoingCommits.Children[0]) {
+							outgoingCommits.Children[0].top = true;
+						}
+						/* alvin */
 						onComplete(that.processChildren(parentItem, that.processMoreChildren(parentItem, syncCommits.Children.slice(0), syncCommits)));
 					}, function(error) {
 						that.handleError(error);
 					});
-				} else if (!that.getTargetReference()) {
+					/* alvin removed !that.getTargetReference -> that.getTargetReference */
+				} else if (that.getTargetReference()) {
 					getSimpleLog().then(function(syncCommits){
 						syncCommits.Children.forEach(function(commit) {
 							commit.history = true;
@@ -502,6 +510,9 @@ define([
 				}
 				if (item.Type !== "Synchronized") { //$NON-NLS-0$
 					that.updateCommands();
+					/* alvin */
+					that.expandSections(children);
+					/* alvin */
 				}
 				if (progress) progress.done();
 				deferred.resolve(children);
@@ -1170,6 +1181,17 @@ define([
 							if (model.tracksRemoteBranch()) {
 								Deferred.when(model.syncCommits || model._getSync(), function(syncCommits) {
 									var count = item.Type === "Outgoing" ? syncCommits.AheadCount : syncCommits.BehindCount; //$NON-NLS-0$
+									if (count !== undefined) {
+										title.textContent =  i18nUtil.formatMessage(messages[item.Type + "WithCount"], count); //$NON-NLS-0$
+									}
+								});
+							}
+							break;
+							/* alvin added case synchronized */
+						case "Synchronized":
+							if (model.tracksRemoteBranch()) {
+								Deferred.when(model.syncCommits || model._getSync(), function(syncCommits) {
+									var count = item.Type === "Synchronized" ? syncCommits.AheadCount : syncCommits.BehindCount; //$NON-NLS-0$
 									if (count !== undefined) {
 										title.textContent =  i18nUtil.formatMessage(messages[item.Type + "WithCount"], count); //$NON-NLS-0$
 									}
