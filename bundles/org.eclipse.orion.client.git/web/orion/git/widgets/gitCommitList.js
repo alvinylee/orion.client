@@ -291,6 +291,11 @@ define([
 						if (outgoingCommits.Children[0]) {
 							outgoingCommits.Children[0].top = true;
 						}
+						/*if there no outgoingCommits.Children at 0 position, we set top to true*/
+						else{
+
+							commit.outgoing = false;
+						}
 						onComplete(that.processChildren(parentItem, that.processMoreChildren(parentItem, outgoingCommits.Children.slice(0), outgoingCommits)));
 					}, function(error){
 						that.handleError(error);
@@ -344,7 +349,7 @@ define([
 			return this.parentId + (item.Name ? item.Name : "") + (item.Type ? item.Type : "") + (item.parent ? item.parent.Type : ""); //$NON-NLS-0$; //$NON-NLS-0$
 		},
 		processMoreChildren: function(parentItem, children, item, type) {
-			type = type || "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
+			type = "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
 			
 			var fullList = parentItem.children;
 			if (fullList) {
