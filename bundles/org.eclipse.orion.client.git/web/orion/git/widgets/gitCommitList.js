@@ -344,7 +344,7 @@ define([
 			return this.parentId + (item.Name ? item.Name : "") + (item.Type ? item.Type : "") + (item.parent ? item.parent.Type : ""); //$NON-NLS-0$; //$NON-NLS-0$
 		},
 		processMoreChildren: function(parentItem, children, item, type) {
-			type = type || "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
+			type = "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
 			
 			var fullList = parentItem.children;
 			if (fullList) {
