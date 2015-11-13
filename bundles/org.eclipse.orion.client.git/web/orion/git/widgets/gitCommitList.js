@@ -344,18 +344,19 @@ define([
 			return this.parentId + (item.Name ? item.Name : "") + (item.Type ? item.Type : "") + (item.parent ? item.parent.Type : ""); //$NON-NLS-0$; //$NON-NLS-0$
 		},
 		processMoreChildren: function(parentItem, children, item, type) {
-			type = "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
+			type = type || "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
 			
 			var fullList = parentItem.children;
 			if (fullList) {
 				var args = [fullList.length - 1, 1].concat(children);
 				Array.prototype.splice.apply(fullList, args);
 			} else {
-				fullList = children;
+				fullList = parentItem;
 			}
 			if (item.NextLocation) {
 				fullList.push({Type: type, NextLocation: item.NextLocation, selectable: false, isNotSelectable: true}); //$NON-NLS-0$
 			}
+
 			return fullList;
 		},
 		processChildren: function(parentItem, items) {
