@@ -32,7 +32,7 @@ function getBranches(workspaceDir, fileRoot, req, res, next, rest) {
 	.then(function(referenceList) {
  		referenceList.forEach(function(ref) {
  			if (ref.isBranch()) {
- 				var branchURL = ref.name().split("/").join("%252F");
+ 				var branchURL = ref.name().split("/").join("/");
  				var branchName = ref.name().replace("refs/heads/", "");
  				var isCurrent = ref.isHead() ? true : false;
 
@@ -143,7 +143,7 @@ function getBranchMetadata(workspaceDir, fileRoot, req, res, next, rest) {
 
 	 			remotes.forEach(function(remote) {
 					var nameToMatch = remote.substring(remote.indexOf("/") + 1);
-					var remoteURL = remote.split("/").join("%252F");
+					var remoteURL = remote.split("/").join("/");
 					var remoteName = remote.substring(0, remote.indexOf("/"));
 					if (remoteName === branchName) {
 						remoteLocations.push({

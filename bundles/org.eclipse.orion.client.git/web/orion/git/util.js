@@ -155,6 +155,7 @@ define([
 	}
 	
 	function shortenRefName(ref) {
+		var fullName = ref.FullName;
 		if (ref.Detached) {
 			return i18nUtil.formatMessage(messages['DetachedHead ${0}'], shortenString(ref.HeadSHA));
 		}
@@ -165,7 +166,7 @@ define([
 		if (ref.Type === "Commit") { //$NON-NLS-0$
 			result = shortenString(result);
 		}
-		if (ref.Type === "RemoteTrackingBranch" && ref.FullName.indexOf("heads") > -1) { //$NON-NLS-0$
+		if (ref.Type === "RemoteTrackingBranch" && fullName.indexOf("heads") > -1) { //$NON-NLS-0$
 			result += messages[" [New branch]"];
 		}
 		return result;
@@ -209,7 +210,8 @@ define([
 	}
 	
 	function isNewBranch(branch) {
-		return branch && branch.Type === "RemoteTrackingBranch" && branch.FullName.indexOf("heads") > -1; //$NON-NLS-0$
+		var fullName = branch.FullName;
+		return branch && branch.Type === "RemoteTrackingBranch" && fullName.indexOf("heads") > -1; //$NON-NLS-0$
 	}
 	
 	function tracksRemoteBranch(branch) {

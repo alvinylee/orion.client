@@ -325,11 +325,9 @@ function postCommit(workspaceDir, fileRoot, req, res, next, rest) {
 	if (req.body.New) { //This is a weird route. Placeholder code so server doesn't crash.
 		repoPath = rest.replace("commit/", "");
 		var branch = repoPath.substring(0, repoPath.indexOf("/"));
-		var location = "/gitapi/commit/" + branch + ".." + req.body.New + repoPath.replace(branch, "");
+		var location = "/gitapi/commit/" + branch + "/remotes/" + req.body.New + repoPath.replace(branch, "");
 		res.statusCode = 200;
-  //       var resp = JSON.stringify({
-		// 	"Location": location
-		// });
+
         res.setHeader('Content-Type', 'application/json');
         // res.setHeader('Content-Length', resp.length);
         res.setHeader('Location', url.format({
@@ -339,7 +337,7 @@ function postCommit(workspaceDir, fileRoot, req, res, next, rest) {
         // res.end(resp);
         res.end();
         return;
-	}
+	} 
 
 	repoPath = rest.replace("commit/HEAD/file/", "");
 	repoPath = repoPath.indexOf("/") === -1 ? repoPath : repoPath.substring(0, repoPath.indexOf("/"));
