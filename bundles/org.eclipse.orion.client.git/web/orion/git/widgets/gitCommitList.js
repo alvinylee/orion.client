@@ -350,8 +350,12 @@ define([
 		},
 		processMoreChildren: function(parentItem, children, item, type) {
 			type = "MoreCommits"; //$NON-NLS-0$ /* use more commits by default */
-			
-			var fullList = parentItem.children;
+			var fullList;
+
+			if(parentItem != null){
+				fullList = parentItem.children;
+
+			}
 			if (fullList) {
 				var args = [fullList.length - 1, 1].concat(children);
 				Array.prototype.splice.apply(fullList, args);
