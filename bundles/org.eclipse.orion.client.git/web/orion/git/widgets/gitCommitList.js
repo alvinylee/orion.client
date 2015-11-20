@@ -70,6 +70,7 @@ define([
 		getRoot: function(onItem){
 			onItem(this.root);
 		},
+
 		getQueries: function(extraQuery) {
 			return util.generateQuery([pageQuery, this.filterQuery, this.authorQuery, this.committerQuery, this.sha1Query, this.fromDateQuery, this.toDateQuery, extraQuery]);
 		},
@@ -133,9 +134,7 @@ define([
 			var that = this;
 			var activeBranch = this.getActiveBranch();
 			var targetRef = this.getTargetReference();
-			//var location = (targetRef.CommitLocation || targetRef.Location) + that.repositoryPath  + that.getQueries("mergeBase=true"); //$NON-NLS-0$
-			/* alvin */
-			var location = (targetRef.CommitLocation || targetRef.Location) + that.repositoryPath  + that.getQueries();
+			var location = (targetRef.CommitLocation || targetRef.Location) + that.repositoryPath  + that.getQueries("mergeBase=true"); //$NON-NLS-0$
 			var id = activeBranch.Name;
 			return that.syncCommits = that.progressService.progress(that.gitClient.getLog(location, id), messages["Getting git log"]).then(function(resp) {
 				return that.syncCommits = resp;
@@ -328,16 +327,16 @@ define([
 						syncCommits.Children.forEach(function(commit) {
 							commit.history = true;
 						});
-						/* alvin */
-						if (outgoingCommits.Children[0]) {
-							outgoingCommits.Children[0].top = true;
+						/* 479702a
+						if (syncCommits.Children[0]) {
+							syncCommits.Children[0].top = true;
 						}
-						/* alvin */
+						*/
 						onComplete(that.processChildren(parentItem, that.processMoreChildren(parentItem, syncCommits.Children.slice(0), syncCommits)));
 					}, function(error) {
 						that.handleError(error);
 					});
-					/* alvin removed !that.getTargetReference -> that.getTargetReference */
+					/* 479702a FIX: !that.getTargetReference -> that.getTargetReference */
 				} else if (that.getTargetReference()) {
 					getSimpleLog().then(function(syncCommits){
 						syncCommits.Children.forEach(function(commit) {
@@ -510,9 +509,7 @@ define([
 				}
 				if (item.Type !== "Synchronized") { //$NON-NLS-0$
 					that.updateCommands();
-					/* alvin */
-					that.expandSections(children);
-					/* alvin */
+					//that.expandSections(children); // 479702a
 				}
 				if (progress) progress.done();
 				deferred.resolve(children);
@@ -1197,7 +1194,7 @@ define([
 								});
 							}
 							break;
-							/* alvin added case synchronized */
+							/* 479702a
 						case "Synchronized":
 							if (model.tracksRemoteBranch()) {
 								Deferred.when(model.syncCommits || model._getSync(), function(syncCommits) {
@@ -1208,6 +1205,7 @@ define([
 								});
 							}
 							break;
+							*/
 					}
 					if (item.Type !== "NoCommits") { //$NON-NLS-0$
 						title.classList.add("gitCommitListSectionTitle"); //$NON-NLS-0$
