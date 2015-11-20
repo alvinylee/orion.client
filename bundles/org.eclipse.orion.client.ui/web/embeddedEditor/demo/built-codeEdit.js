@@ -10,8 +10,11 @@
  *     IBM Corporation - initial API and implementation
  *******************************************************************************/
 /*eslint-env browser, amd*/
-define(['embeddedEditor/builder/embeddedEditor'],
-function(mEmbeddedEditor) {
+define(['embeddedEditor/builder/embeddedEditor',
+		'orion/Deferred'
+],
+function(mEmbeddedEditor,
+Deferred) {
 	var defaultPluginURLs = [
 		"../../javascript/plugins/javascriptPlugin_embed_dev.html",
 		"../../webtools/plugins/webToolsPlugin_embed_dev.html",
@@ -34,7 +37,10 @@ function(mEmbeddedEditor) {
 						 
 	var contents2 = '<server description="new server">\n' +
 					 '</server>';
-	var embeddedEditor = new mEmbeddedEditor();
+	var embeddedEditor = new mEmbeddedEditor({
+		_defaultPlugins: defaultPluginURLs,
+		toolbarId: "__toolbar__",
+		/*, userPlugins:["editorCommandsPlugin.html"]*/});
 	var proposals = [
 		"proposal ",
 		"proposal ",
@@ -88,26 +94,49 @@ function(mEmbeddedEditor) {
 			return null;
 		}
 	};
-	embeddedEditor.create({parent: "embeddedEditor", _defaultPlugins: defaultPluginURLs}).then(function(editorViewer) {
+	function computeOccurrences(orionContext, context) {
+		var oc = [];
+		if(typeof context.selection) {
+			oc = context.selection.start > 5 ? [{start: context.selection.start + 5, end: context.selection.start + 9}] : [];
+		} 
+		return new Deferred().resolve(oc);
+	}
+	function execute(orionContext, params) {
+		alert("foo");
+	}
+	
+	embeddedEditor.create({parent: "embeddedEditor"}).then(function(editorViewer) {
 		document.getElementById("progressMessageDiv").textContent = "Plugins loaded!";
 		editorViewer.setContents(contents, "application/javascript");
 		//editorViewer.inputManager.setAutoSaveTimeout(-1);
 		editorViewer.editor.getTextView().setOptions({themeClass: "editorTheme"});
 	});
-	embeddedEditor.create({parent: "embeddedEditor1", _defaultPlugins: defaultPluginURLs,
+	
+	embeddedEditor.create({parent: "embeddedEditor1",
 						   contentType: "application/xml",
 						   contents: contents2}).then(function(editorViewer){
+		if (editorViewer.settings) {
+			editorViewer.settings.contentAssistAutoTrigger = true;
+			editorViewer.settings.showOccurrences = true;
+		}
+		editorViewer.serviceRegistry.registerService('orion.edit.command', {execute: execute}, {
+			name: 'Xtext formatting service',
+			id: 'xtext.formatter',
+			key: ['l', true, true],
+			contentType: ["application/xml"]
+		});		
 		editorViewer.serviceRegistry.registerService("orion.edit.contentassist",
 				contentAssistProvider,
 	    		{	name: "xmlContentAssist",
-	    			contentType: ["application/xml"]
+	    			contentType: ["application/xml"],
+	    			charTriggers: "[.(]"
 	    		});
 		editorViewer.serviceRegistry.registerService("orion.edit.hover",
 			hoverProvider,
     		{	name: "xmlContentHover",
     			contentType: ["application/xml"]
     		});
-	
-						   		
+		editorViewer.serviceRegistry.registerService('orion.edit.occurrences',
+			{computeOccurrences: computeOccurrences}, {contentType: ["application/xml"]});	
 	});
 });

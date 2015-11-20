@@ -147,13 +147,13 @@ define(['orion/webui/littlelib', 'orion/EventTarget'], function(lib, EventTarget
 			var actionTaken = false;
 			if (!this.isVisible()) {
 				this.dispatchEvent({type: "triggered", dropdown: this, event: mouseEvent}); //$NON-NLS-0$
-				lib.setFramesEnabled(false);
 				if (this._populate) {
 					this.empty();
 					this._populate(this._dropdownNode);
 				}
 				var items = this.getItems();
 				if (items.length > 0) {
+					lib.setFramesEnabled(false);
 					if (this._boundAutoDismiss) {
 						lib.removeAutoDismiss(this._boundAutoDismiss);
 					} 
@@ -460,7 +460,7 @@ define(['orion/webui/littlelib', 'orion/EventTarget'], function(lib, EventTarget
 	 	var element = document.createElement(innerNodeType); //$NON-NLS-0$
 		element.tabIndex = 0;
 		element.className = "dropdownMenuItem"; //$NON-NLS-0$
-		element.role = "menuitem";  //$NON-NLS-0$
+		element.setAttribute("role", "menuitem");  //$NON-NLS-0$ //$NON-NLS-1$
 		
 		if (text) {
 			var span = document.createElement("span");  //$NON-NLS-0$

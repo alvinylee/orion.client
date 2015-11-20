@@ -239,6 +239,10 @@ define([
 			} else {
 				var file = request.args.file;
 				response.args.file = file;
+				if(!/\.js|\.htm|\.htm$/ig.test(file)) {
+					//no extension given, guess at js
+					file += '.js'; //$NON-NLS-1$
+				}
 				try {
 					return fileClient.read(file).then(function(contents) {
 								response.args.contents = contents;
@@ -451,46 +455,44 @@ define([
 	          name: javascriptMessages['referencesMenuName'],
 	          tooltip : javascriptMessages['referencesMenuTooltip']
 		});
-		//TODO
-		if ("true" === localStorage.getItem("darklaunch")) {
-			var refscommand = new RefsCommand(ternWorker, 
-							astManager,
-							scriptresolver,
-							CUProvider,
-							new mGSearchClient.GSearchClient({serviceRegistry: core.serviceRegistry, fileClient: fileClient}));
-			provider.registerServiceProvider("orion.edit.command",  //$NON-NLS-1$
-	    			{
-						execute: function(editorContext, options) {
-							options.kind ='project'; //$NON-NLS-1$
-							return refscommand.execute(editorContext, options);
-						}
-					},
-	    			{
-	    		name: javascriptMessages["projectRefsName"],  //$NON-NLS-1$
-	    		tooltip : javascriptMessages['projectRefsTooltip'],  //$NON-NLS-1$
-	    		parentPath: "js.references", //$NON-NLS-1$
-	    		id : "project.js.refs",  //$NON-NLS-1$
-	    		key : [ "y", true, true, false, false],  //$NON-NLS-1$
-	    		contentType: ['application/javascript', 'text/html']  //$NON-NLS-1$ //$NON-NLS-2$
-	    			}
-	    	);
-	    	provider.registerServiceProvider("orion.edit.command",  //$NON-NLS-1$
-	    			{
-						execute: function(editorContext, options) {
-							options.kind ='workspace'; //$NON-NLS-1$
-							return refscommand.execute(editorContext, options);
-						}
-					},
-	    			{
-	    		name: javascriptMessages["workspaceRefsName"],  //$NON-NLS-1$
-	    		tooltip : javascriptMessages['workspaceRefsTooltip'],  //$NON-NLS-1$
-	    		parentPath: "js.references", //$NON-NLS-1$
-	    		id : "workspace.js.refs",  //$NON-NLS-1$
-	    		//key : [ "g", true, true, false, false],  //$NON-NLS-1$
-	    		contentType: ['application/javascript', 'text/html']  //$NON-NLS-1$ //$NON-NLS-2$
-	    			}
-	    	);
-		}
+		var refscommand = new RefsCommand(ternWorker, 
+						astManager,
+						scriptresolver,
+						CUProvider,
+						new mGSearchClient.GSearchClient({serviceRegistry: core.serviceRegistry, fileClient: fileClient}));
+		provider.registerServiceProvider("orion.edit.command",  //$NON-NLS-1$
+    			{
+					execute: function(editorContext, options) {
+						options.kind ='project'; //$NON-NLS-1$
+						return refscommand.execute(editorContext, options);
+					}
+				},
+    			{
+    		name: javascriptMessages["projectRefsName"],  //$NON-NLS-1$
+    		tooltip : javascriptMessages['projectRefsTooltip'],  //$NON-NLS-1$
+    		parentPath: "js.references", //$NON-NLS-1$
+    		id : "project.js.refs",  //$NON-NLS-1$
+    		key : [ "y", true, true, false, false],  //$NON-NLS-1$
+    		contentType: ['application/javascript', 'text/html']  //$NON-NLS-1$ //$NON-NLS-2$
+    			}
+    	);
+    	provider.registerServiceProvider("orion.edit.command",  //$NON-NLS-1$
+    			{
+					execute: function(editorContext, options) {
+						options.kind ='workspace'; //$NON-NLS-1$
+						return refscommand.execute(editorContext, options);
+					}
+				},
+    			{
+    		name: javascriptMessages["workspaceRefsName"],  //$NON-NLS-1$
+    		tooltip : javascriptMessages['workspaceRefsTooltip'],  //$NON-NLS-1$
+    		parentPath: "js.references", //$NON-NLS-1$
+    		id : "workspace.js.refs",  //$NON-NLS-1$
+    		//key : [ "g", true, true, false, false],  //$NON-NLS-1$
+    		contentType: ['application/javascript', 'text/html']  //$NON-NLS-1$ //$NON-NLS-2$
+    			}
+    	);
+
     	provider.registerServiceProvider("orion.edit.command",  //$NON-NLS-1$
     			new OpenImplCommand.OpenImplementationCommand(astManager, ternWorker, CUProvider),  //$NON-NLS-1$
     			{

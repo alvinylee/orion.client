@@ -245,7 +245,6 @@
 
 .mainToolbar .gitFilterBox input {
 	width: 200px;
-	padding-right: 22px;
 }
 
 html[dir="rtl"] .mainToolbar .gitFilterBox input { /* ACGC */
@@ -259,14 +258,17 @@ html[dir="rtl"] .mainToolbar .gitFilterBox input { /* ACGC */
 
 .searchButton {
 	position: relative;
-	left: -28px;
-	top: -2px;
+	left: 5px;
 	cursor: pointer;
 	outline: none;
+	color: gray;
+	padding: 0 2px 2px;
+    border: 1px solid transparent;
 }
 
 .searchButton:hover {
-	color: #00AED1;
+	background-color: #a5b5bc;
+	border: 1px solid #ccc;
 }
 
 .mainToolbar #configSection {
@@ -500,14 +502,13 @@ _:-moz-tree-row(hover), .gitChangeListCheck { /* Firefox  HACK */
 
 .gitCommitMore {
 	padding: 0;
-	margin: 0;
+	margin: 10px 5px 5px 0;
 	opacity: 0.6;
 	border: none;
 	background: transparent;
-	margin-top: 5px;
-	margin-right: 5px;
 	color: #00aed1;
 	cursor: pointer;
+	float: left;
 }
 
 .checkedRow .gitCommitMore {
@@ -821,6 +822,23 @@ _:-moz-tree-row(hover), .gitChangeListCheck { /* Firefox  HACK */
 
 .checkedRow .gitImageSprite {
 	color: white;
+}
+
+.treeTableRow .commitActions {
+	display: none;
+	padding-top: 3px;
+}
+
+.treeTableRow:hover .commitActions {
+	display: block;
+}
+
+.treeTableRow .parameterPopupOpen {
+	display: block;
+}
+
+.checkedRow .commitActions {
+	display: block;
 }
 
 .git-sprite-notsure{ background-position: 0 -216px; width: 16px; height: 16px; } 

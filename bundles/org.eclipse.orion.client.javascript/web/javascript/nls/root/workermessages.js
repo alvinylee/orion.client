@@ -71,5 +71,14 @@ define({
 	'failedRefsNoServer': 'failed to find refs - server not started',
 	'failedType': 'Failed to find type',
 	'unknownRequest': 'The request \'${0}\' is unknown',
-	'serverNotStarted': 'The server has not been started. Request: \'${0}\''
+	'serverNotStarted': 'The server has not been started. Request: \'${0}\'',
+	'funcProposalDescription': ' - The name of the function',
+	'funcParamProposalDescription': ' - Function parameter',
+	'eslintRuleProposalDescripton': ' - ESLint rule',
+	'eslintEnvProposalDescription': ' - ESLint environment name',
+	'onlineDocumentationProposalEntry': '\n\n[Online documentation](${0})',
+	'eslintRuleEnableDisable': ' - ESLint rule enable or disable',
+	'eslintEnvDirective': ' - ESLint environment directive',
+	'eslintRuleEnable': ' - ESLint rule enablement directive',
+	'eslintRuleDisable': ' - ESLint rule disablement directive'
 });
