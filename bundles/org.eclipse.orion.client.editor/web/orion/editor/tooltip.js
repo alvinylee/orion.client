@@ -76,6 +76,10 @@ function Tooltip (view) {
 			}, true);
 			textUtil.addEventListener(document, "scroll", this._scrollHandler = function(event) { //$NON-NLS-0$
 				if (!self.isVisible()) return;
+
+				// Make sure the scroll isn't *inside* the tooltip...
+				if (textUtil.contains(tooltipDiv, event.target || event.srcElement)) { return; }
+
 				if (self._topPixel !== self._view.getTopPixel() || self._leftPixel !== self._view.getHorizontalPixel()) {
 					self.hide();
 				}
@@ -692,7 +696,11 @@ function Tooltip (view) {
 			// render the title, if any
 			if (data.title) {
 				var titleDiv = util.createElement(document, "div"); //$NON-NLS-0$;
-				titleDiv.innerHTML = this.hover.renderMarkDown ? this.hover.renderMarkDown(data.title) : data.title;
+				if (this.hover.renderMarkDown) {
+					titleDiv.innerHTML = this.hover.renderMarkDown(data.title);
+				} else {
+					titleDiv.textContent = data.title;
+				}
 				titleDiv.classList.add("hoverTooltipTitle"); //$NON-NLS-0$
 				sectionDiv.appendChild(titleDiv);
 			}

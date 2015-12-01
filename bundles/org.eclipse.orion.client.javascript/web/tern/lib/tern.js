@@ -166,7 +166,11 @@
     },
     finishAsyncAction: function(err) {
       if (err) this.asyncError = err;
-      if (--this.pending === 0) this.signal("everythingFetched");
+      //ORION
+      if(this.pending > 0) {
+      	this.pending--;
+      }
+      if (this.pending === 0) this.signal("everythingFetched");
     }
   });
 
@@ -208,19 +212,13 @@
 
       function run() {
         var result;
-        if(queryType.runAsync) { //ORION
-        	queryType.runAsync(srv, query, file, function(err, result) {
-        		c(err, result);
-        	});
-        } else {
-	        try {
-	          result = queryType.run(srv, query, file);
-	        } catch (e) {
-	          if (srv.options.debug && e.name != "TernError") console.error(e.stack);
-	          return c(e);
-	        }
-	        c(null, result);
-	    }
+        try {
+          result = queryType.run(srv, query, file);
+        } catch (e) {
+          if (srv.options.debug && e.name != "TernError") console.error(e.stack);
+          return c(e);
+        }
+        c(null, result);
       }
       infer.withContext(srv.cx, timeBudget ? function() { infer.withTimeout(timeBudget[0], run); } : run);
     });

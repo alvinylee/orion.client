@@ -176,7 +176,7 @@ define([
 			}
 			return false;
 		},
-		load: function() {
+		load: function(charset) {
 			var fileURI = this.getInput();
 			if (!fileURI) { return; }
 			var fileClient = this.fileClient;
@@ -243,7 +243,7 @@ define([
 							this._setInputContents(this._parsedLocation, fileURI, contents, metadata);
 						}.bind(this), errorHandler);
 					} else {
-						var charset = this._charset;
+						charset = charset || this._charset;
 						// Read contents if this is a text file and encoding is UTF-8
 						var isText = this._isText(metadata);
 						if (isUTF8(charset) && isText) {
@@ -481,11 +481,12 @@ define([
 				loc = "#" + loc; //$NON-NLS-0$
 			}
 			var input = PageUtil.matchResourceParameters(loc), oldInput = this._parsedLocation || {};
+			var encodingChanged = oldInput.encoding !== input.encoding;
 			if (editor && editor.isDirty()) {
 				var oldLocation = this._location;
 				var oldResource = oldInput.resource;
 				var newResource = input.resource;
-				if (oldResource !== newResource) {
+				if (oldResource !== newResource || encodingChanged) {
 					if (this._autoSaveEnabled) {
 						this.save();
 					} else if (!window.confirm(messages.confirmUnsavedChanges)) {
@@ -522,7 +523,7 @@ define([
 				return;
 			}
 			if (fileURI) {
-				if (fileURI === this._input) {
+				if (fileURI === this._input && !encodingChanged) {
 					if (editorChanged) {
 						this.reportStatus("");
 						this._setInputContents(input, fileURI, null, this._fileMetadata, this._isText(this._fileMetadata));
@@ -539,7 +540,7 @@ define([
 					this._readonly = false;
 					this._lastMetadata = this._fileMetadata;
 					this._fileMetadata = null;
-					this.load();
+					this.load(input.encoding);
 				}
 			} else {
 				saveSession();

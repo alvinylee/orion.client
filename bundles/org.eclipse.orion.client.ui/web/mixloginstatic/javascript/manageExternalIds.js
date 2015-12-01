@@ -69,7 +69,9 @@ define(["i18n!orion/mixloginstatic/nls/messages", "orion/xhr", "orion/webui/litt
 				thead.appendChild(tr);
 				var td = document.createElement("td"); //$NON-NLS-0$
 				td.classList.add("navColumn"); //$NON-NLS-0$
-				td.innerHTML = "<h2>External Id</h2>"; //$NON-NLS-0$
+				var h2 = document.createElement("h2"); //$NON-NLS-0$
+				h2.textContent = "External Id"; //$NON-NLS-1$
+				td.appendChild(h2);
 				tr.appendChild(td);
 			}
 
@@ -102,7 +104,7 @@ define(["i18n!orion/mixloginstatic/nls/messages", "orion/xhr", "orion/webui/litt
 		var removeLink = document.createElement("a"); //$NON-NLS-0$
 		removeLink.classList.add("removeExternalId"); //$NON-NLS-0$
 		removeLink.id = "remlink" + i; //$NON-NLS-0$
-		removeLink.innerHTML = "Remove";
+		removeLink.textContent = "Remove";
 		removeLink.style.visibility = "hidden"; //$NON-NLS-0$
 		removeLink.title = "Remove " + externalId;
 		td.appendChild(removeLink);
@@ -188,7 +190,7 @@ define(["i18n!orion/mixloginstatic/nls/messages", "orion/xhr", "orion/webui/litt
 		h2.style.margin = "10px 5px 10px 0"; //$NON-NLS-0$
 		h2.style.cssFloat = "left";//$NON-NLS-0$
 		h2.id = "addExternalAccount";//$NON-NLS-0$
-		h2.innerHTML = messages["AddExternalAccount"];//$NON-NLS-0$
+		h2.textContent = messages["AddExternalAccount"];//$NON-NLS-0$
 		externalIdContainer.appendChild(h2);
 	}
 
