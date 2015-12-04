@@ -314,6 +314,9 @@ define([
 							}
 							children = that.processMoreChildren(parentItem, log.Children.slice(0), log);
 						} 
+						else{
+							commit.outgoing = false;
+						}
 						onComplete(that.processChildren(parentItem, children));
 					}, function(error){
 						that.handleError(error);
