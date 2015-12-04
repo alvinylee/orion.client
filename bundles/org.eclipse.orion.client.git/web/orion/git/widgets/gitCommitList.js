@@ -366,6 +366,9 @@ define([
 			if (item.NextLocation) {
 				fullList.push({Type: type, NextLocation: item.NextLocation, selectable: false, isNotSelectable: true}); //$NON-NLS-0$
 			}
+			else{
+				fullList.pop();
+			}
 
 			return fullList;
 		},
