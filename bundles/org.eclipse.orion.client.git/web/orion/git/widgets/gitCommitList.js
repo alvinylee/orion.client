@@ -294,7 +294,8 @@ define([
 						/*if there no outgoingCommits.Children at 0 position, we set top to true*/
 						else{
 
-							commit.outgoing = false;
+							//commit.outgoing = false;
+							outgoingCommits.outgoing = false;
 						}
 						onComplete(that.processChildren(parentItem, that.processMoreChildren(parentItem, outgoingCommits.Children.slice(0), outgoingCommits)));
 					}, function(error){
